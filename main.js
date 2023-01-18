@@ -1,5 +1,7 @@
 const API_URL_RANDOM = 'https://api.thecatapi.com/v1/images/search?limit=2&api_key=live_EYz298U2kTd89vDHrucmMGpGjknX2M4i9G5fnNusvBTppz1Bkubngk9SSF6ly6H9';
-const API_URL_FAVORITES = 'https://api.thecatapi.com/v1/favourites?limit=100&api_key=live_EYz298U2kTd89vDHrucmMGpGjknX2M4i9G5fnNusvBTppz1Bkubngk9SSF6ly6H9';
+const API_URL_FAVORITES = 'https://api.thecatapi.com/v1/favourites'
+const API_URL_FAVORITES_DELETE = (id) => `https://api.thecatapi.com/v1/favourites/${id}?api_key=live_EYz298U2kTd89vDHrucmMGpGjknX2M4i9G5fnNusvBTppz1Bkubngk9SSF6ly6H9`;
+
 
 
 const sError = document.getElementById('nooooo');
@@ -29,7 +31,12 @@ sError.innerHTML = "hubo un error "  +  res.status;
 
 
 async function loadFavouriteMichis() {
-    const res = await fetch(API_URL_FAVORITES);
+    const res = await fetch(API_URL_FAVORITES,{
+        method: 'GET',
+        headers:{
+            'X-API-KEY' : 'live_EYz298U2kTd89vDHrucmMGpGjknX2M4i9G5fnNusvBTppz1Bkubngk9SSF6ly6H9',
+        }
+        });
     const data = await res.json();
     console.log("favoritos")
     console.log(data)
@@ -37,17 +44,25 @@ async function loadFavouriteMichis() {
     if (res.status !==200) {
         sError.innerHTML = "Hubo un error: " + res.status + data.message;
     } else {
+        const section = document.getElementById('favoritesMichis')
+    section.innerHTML = '';
+    const h2 = document.createElement('h2');
+    const h2text = document.createTextNode('michis favoritos');
+    h2.appendChild(h2text);
+    section.appendChild(h2);
+
+
         data.forEach(michi => {
-    const section = document.getElementById('favoritesMichis')
     const article = document.createElement('article');
     const img = document.createElement('img');
     const btn = document.createElement('button');
-    const btnText = document.createTextNode('sacar al michi de fvoritos');
+    const btnText = document.createTextNode('sacar al michi de favoritos');
     
 
-    btn.appendChild(btnText);
     img.src = michi.image.url
-
+    img.width = 150;
+    btn.appendChild(btnText);
+    btn.onclick = () => deleteFavouriteMichi(michi.id);
     article.appendChild(img);
     article.appendChild(btn);
     section.appendChild(article);
@@ -61,6 +76,7 @@ const res = await fetch(API_URL_FAVORITES, {
     method: 'POST',
     headers:{
     'Content-Type':'application/json',
+    'X-API-KEY' : 'live_EYz298U2kTd89vDHrucmMGpGjknX2M4i9G5fnNusvBTppz1Bkubngk9SSF6ly6H9',
     },
     body: JSON.stringify({
     image_id: id,
@@ -72,10 +88,26 @@ console.log('save');
 console.log(res);
 if (res.status !== 200) {
     sError.innerHTML = "Hubo un error: " + res.status + data.message;
-} 
+} else {
+    console.log("michi guardado en favoritos")
+    loadFavouriteMichis();
+}
 }
 
+async function deleteFavouriteMichi(id){
+    const res = await fetch(API_URL_FAVORITES_DELETE(id), {
+        method: 'DELETE',
+    });
+    
+    const data = res.json;
 
+    if (res.status !== 200) {
+        sError.innerHTML = "Hubo un error: " + res.status + data.message;
+    } else {
+        console.log("michi eliminado de favoritos")
+        loadFavouriteMichis();
+    }
+}
 
 loadRandomMichis();
 loadFavouriteMichis();
