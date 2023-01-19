@@ -1,0 +1,19 @@
+{
+  "name": "curso-practico-consumo-de-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html", 
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Danielecg/curso-practico-api-javascript.git"
+  },
+  "author": "Daniel Castillo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Danielecg/curso-practico-api-javascript/issues"
+  },
+  "homepage": "https://github.com/Danielecg/curso-practico-api-javascript#readme"
+}
