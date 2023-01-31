@@ -30,7 +30,8 @@ function navigator() {
     }
     
 
-    location.hash
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 function homePage () {
@@ -67,6 +68,13 @@ function categoriesPage () {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.remove('inactive');
+
+    const [_,  categoryData] = location.hash.split('=')// ["#category", "id-name"];
+    const [categoryId, categoryName] = categoryData.split('-');
+
+    headerCategoryTitle.innerHTML = categoryName
+
+    getMoviesByCategory(categoryId);
 }
 function movieDetailsPage () {
     console.log("moviee");
